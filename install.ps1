@@ -1,8 +1,3 @@
-# =========================================================
-#  FoxTools Installer - estilo "Chris Titus Tech"
-#  Uso remoto:  irm https://tudominio.com/install.ps1 | iex
-# =========================================================
-
 $ErrorActionPreference = "Stop"
 
 function Write-Banner {
@@ -37,30 +32,25 @@ function Write-Err($msg) {
 Clear-Host
 Write-Banner
 
-# --- Configuración ---
 $appName   = "FoxTools"
 $url       = "https://github.com/foxtools23/foxtools/releases/download/v1.0.0/FoxTools.exe"
 $installDir = "$env:LOCALAPPDATA\FoxTools"
 $exePath    = Join-Path $installDir "FoxTools.exe"
 
 try {
-    # 1. Crear carpeta de instalación
     Write-Step "Creando carpeta de instalación en $installDir ..."
     New-Item -ItemType Directory -Force -Path $installDir | Out-Null
     Write-Ok "Carpeta lista."
 
-    # 2. Descargar con barra de progreso nativa
     Write-Step "Descargando $appName ..."
     $ProgressPreference = 'Continue'
     Invoke-WebRequest -Uri $url -OutFile $exePath -UseBasicParsing
     Write-Ok "Descarga completada."
 
-    # 3. Desbloquear el archivo (evita advertencias de "Mark of the Web")
     Write-Step "Desbloqueando archivo..."
     Unblock-File -Path $exePath
     Write-Ok "Archivo desbloqueado."
 
-    # 4. Crear acceso directo en el escritorio (opcional)
     Write-Step "Creando acceso directo en el escritorio..."
     $WshShell = New-Object -ComObject WScript.Shell
     $Shortcut = $WshShell.CreateShortcut("$env:USERPROFILE\Desktop\$appName.lnk")
@@ -68,7 +58,6 @@ try {
     $Shortcut.Save()
     Write-Ok "Acceso directo creado."
 
-    # 5. Ejecutar la app
     Write-Step "Iniciando $appName ..."
     Start-Process $exePath
     Write-Ok "¡Listo! $appName se está ejecutando."
